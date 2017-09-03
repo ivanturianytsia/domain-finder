@@ -31,7 +31,7 @@ func main() {
 
 	// t := template.Must(template.ParseFiles("cmd/index.html"))
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		t := template.Must(template.ParseFiles("cmd/index.html"))
+		t := template.Must(template.ParseFiles("app/views/index.html"))
 		t.ExecuteTemplate(w, "index", map[string]string{
 			"PusherKey": os.Getenv("PUSHER_KEY"),
 		})
@@ -51,7 +51,7 @@ func main() {
 		go handleWord(words[0], key)
 	})
 
-	http.ListenAndServe(":8000", mux)
+	http.ListenAndServe(":"+os.Getenv("PORT"), mux)
 }
 
 func handleWord(word, key string) {

@@ -4,9 +4,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/ivanturianytsia/domainfinder"
-	"github.com/ivanturianytsia/domainfinder/parallel"
-	"github.com/ivanturianytsia/domainfinder/thesaurus"
+	"github.com/ivanturianytsia/domainfinder/app/lib"
+	"github.com/ivanturianytsia/domainfinder/app/lib/parallel"
+	"github.com/ivanturianytsia/domainfinder/app/lib/thesaurus"
 )
 
 type domain struct {
