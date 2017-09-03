@@ -2,7 +2,7 @@ package thesaurus
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
 	"net/http"
 )
 
@@ -29,7 +29,7 @@ func (b BigHuge) Synonyms(term string) ([]string, error) {
 
 	response, err := http.Get("http://words.bighugelabs.com/api/2/" + b.APIKey + "/" + term + "/json")
 	if err != nil {
-		return syns, errors.New("bighuge: Failed when looking for synonyms for \"" + term + "\": " + err.Error())
+		return syns, fmt.Errorf("BigHuge: Failed when looking for synonyms for %s:\n%s", term, err.Error())
 	}
 
 	var data synonyms

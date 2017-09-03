@@ -3,8 +3,10 @@ package main
 import (
 	"html/template"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 	"github.com/pusher/pusher-http-go"
@@ -13,16 +15,16 @@ import (
 var client pusher.Client
 
 func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Println("Error loading .env file, using evironmental variables.")
+	}
+
 	client = pusher.Client{
 		AppId:   os.Getenv("PUSHER_ID"),
 		Key:     os.Getenv("PUSHER_KEY"),
 		Secret:  os.Getenv("PUSHER_SECRET"),
 		Cluster: "eu",
 		Secure:  true,
-	}
-
-	if err := godotenv.Load(); err != nil {
-		log.Println("Error loading .env file, using evironmental variables.")
 	}
 
 	mux := http.NewServeMux()
@@ -41,18 +43,12 @@ func main() {
 			w.Write([]byte("Word missing"))
 			return
 		}
-		keys := r.URL.Query()["key"]
-		if len(keys) == 0 {
-			w.WriteHeader(http.StatusBadRequest)
-			w.Write([]byte("Key missing"))
-			return
-		}
-		word := words[0]
-		key := keys[0]
-		go handleWord(word, key)
+		key := strconv.Itoa(rand.Int())
 
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("Success"))
+		w.Write([]byte(key))
+
+		go handleWord(words[0], key)
 	})
 
 	http.ListenAndServe(":8000", mux)

@@ -32,7 +32,8 @@ func findDomains(word string, output chan<- domain, done chan<- struct{}) {
 	// synonyms
 	syns, err := thesaurus.Synonyms(word)
 	if err != nil {
-		log.Fatalf("Failed when looking for synonyms for %s\n%s\n", word, err.Error())
+		log.Printf("Failed when looking for synonyms for %s\n%s\n", word, err.Error())
+		done <- struct{}{}
 		return
 	}
 	syns = append(syns, word)
