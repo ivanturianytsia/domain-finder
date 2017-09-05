@@ -1,6 +1,6 @@
 ./build.sh alpine && ./build.sh image && ./build.sh push
 
-APPNAME="nomi-chat"
+APPNAME="domainfinder"
 REGISTRY="207.244.96.79:5000"
 MACHINE_NAME="nomi-swarm-3m"
 
