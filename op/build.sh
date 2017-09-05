@@ -58,7 +58,7 @@ case $1 in
     ;;
 esac
 
-if [ $2 = "print" ]
+if [ "$2" = "print" ]
 then
   echo $COMMAND
 else

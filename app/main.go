@@ -29,7 +29,7 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	// t := template.Must(template.ParseFiles("cmd/index.html"))
+	// t := template.Must(template.ParseFiles("app/views/index.html"))
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		t := template.Must(template.ParseFiles("app/views/index.html"))
 		t.ExecuteTemplate(w, "index", map[string]string{
@@ -50,6 +50,7 @@ func main() {
 
 		go handleWord(words[0], key)
 	})
+	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./app/public"))))
 
 	http.ListenAndServe(":"+os.Getenv("PORT"), mux)
 }

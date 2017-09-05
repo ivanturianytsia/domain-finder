@@ -3,78 +3,34 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>Domain Finder</title>
 
-    <style>
-      .item-available {
-        color: black;
-      }
-      .item-unavailable {
-        color: lightgray;
-      }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <link rel="stylesheet" href="/public/style.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
   </head>
   <body>
 
-    <input type="text" id="word" />
-    <button id="send">Send</button>
+    <div class="container">
+      <h1>Domain Finder</h1>
+      <p>Enter a keyword to generate domains and check availability</p>
+      <div class="input-field">
+        <input placeholder="Ex.: coffeshop..." id="word" type="text" class="validate" \>
+      </div>
+      <button class="btn" id="send">Send</button>
 
-    <ul id="list">
+      <ul id="list" class="collection"></ul>
+    </div>
 
-    </ul>
 
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script>
     <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
     <script type="text/javascript">
       var PusherKey = "{{ .PusherKey }}"
     </script>
-    <script>
-
-      // Enable pusher logging - don't include this in production
-      Pusher.logToConsole = true;
-
-      console.log(PusherKey)
-
-      var pusher = new Pusher(PusherKey, {
-        cluster: 'eu',
-        encrypted: true
-      });
-
-      var channel = pusher.subscribe('Domains');
-
-      var w = $("#word")
-      var l = $("#list")
-
-      $("#send").click(function() {
-        if (w.val()) {
-          $.get("/domains?word=" + w.val(), function(response) {
-            var key = response
-            l.html("")
-            w.val("")
-            channel.bind('Result-'+key, function(data) {
-              var a = data.available ? "" : "un";
-              var html = "<li class='item-" + a +"available'>"
-              html += "<a href='http://" + data.name +"' target='_blank'>" + data.name + "</a>"
-              html += " is " + a + "available. </li>"
-
-              l.html(l.html() + html)
-            });
-            channel.bind('End-'+key, function(data) {
-              console.log("Unbind from " + key)
-              channel.unbind('Result-'+key)
-              channel.unbind('End-'+key)
-            });
-          })
-        }
-      })
-
-
-      function genKey() {
-        return "" + Date.now() + "_" + Math.floor(Math.random() * 1000)
-      }
-    </script>
+    <script type="text/javascript" src="/public/script.js"></script>
   </body>
 </html>
 {{ end }}
